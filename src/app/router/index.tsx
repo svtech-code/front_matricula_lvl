@@ -5,7 +5,7 @@ import { publicRoutes } from './PublicRoutes';
 
 export const router = createBrowserRouter([
   {
-    path: '/pre-matricula',
+    path: '/',
     element: (
       <Suspense fallback={<div>cargando...</div>}>
         <PublicLayout />
@@ -13,4 +13,13 @@ export const router = createBrowserRouter([
     ),
     children: publicRoutes,
   },
+  // {
+  //   path: '/pre-matricula',
+  //   element: (
+  //     <Suspense fallback={<div>cargando...</div>}>
+  //       <PublicLayout />
+  //     </Suspense>
+  //   ),
+  //   children: publicRoutes,
+  // },
 ]);
