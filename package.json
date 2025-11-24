@@ -1,12 +1,12 @@
 {
-  "name": "rsbuild-react-ts",
+  "name": "front_matricula_lvl",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "rsbuild build",
     "check": "biome check --write",
-    "dev": "rsbuild dev --open",
+    "dev": "rsbuild dev",
     "format": "biome format --write",
     "preview": "rsbuild preview"
   },
