@@ -9,8 +9,8 @@ export const WelcomeSection = () => {
 
       <p className="text-gray-500">
         La pre-matrícula es el primer paso para formalizar el ingreso al{' '}
-        {LICEO_INFO.nombre}. Recuerda que es necesario asistir de manera
-        presencial, al establecimiento durante las fechas informadas, para
+        {LICEO_INFO.nombre}. Recuerde que es necesario asistir de manera
+        presencial al establecimiento durante las fechas informadas, para
         validar los datos y firmar la ficha de matrícula.
       </p>
     </div>

@@ -66,7 +66,7 @@ export const VerifyRutForm = ({
           <Input
             label="RUT del Estudiante"
             type="text"
-            placeholder="Ej: 12345678 o 100234567"
+            placeholder="Ej: 12345678"
             size="md"
             variant="bordered"
             value={rutValue || ''}
