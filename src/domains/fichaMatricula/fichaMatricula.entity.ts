@@ -112,3 +112,85 @@ export interface FichaMatriculaProps {
   familiares: FamiliarProps[];
   formacion_general_opciones: number[];
 }
+
+export interface CreateFichaMatriculaPayload {
+  periodo_lectivo: number;
+  grado_a_matricularse: number;
+  cod_estado_ficha_matricula: number;
+  estudiante: Omit<EstudianteProps, 'curso_inscrito'>;
+  antecedentes_personales: AntecedentesPersonalesProps;
+  antecedentes_academicos: AntecedentesAcademicosProps;
+  antecedentes_localidad: AntecedentesLocalidadProps;
+  antecedentes_pie: AntecedentesPieProps;
+  antecedentes_salud: AntecedentesSaludProps;
+  antecedentes_sociales: AntecedentesSocialesProps;
+  antecedentes_junaeb: AntecedentesJunaebProps;
+  familiares: FamiliarProps[];
+  formacion_general_opciones: number[];
+}
+
+export interface EstudianteResponse extends EstudianteProps {
+  cod_estudiante: number | null;
+}
+
+export interface AntecedentesPersonalesResponse
+  extends AntecedentesPersonalesProps {
+  cod_antecedentes_personales: number | null;
+}
+
+export interface AntecedentesAcademicosResponse
+  extends AntecedentesAcademicosProps {
+  cod_antecedentes_academicos: number | null;
+}
+
+export interface AntecedentesLocalidadResponse
+  extends AntecedentesLocalidadProps {
+  cod_antecedentes_localidad: number | null;
+}
+
+export interface AntecedentesPieResponse extends AntecedentesPieProps {
+  cod_antecedentes_pie: number | null;
+}
+
+export interface AntecedentesSaludResponse extends AntecedentesSaludProps {
+  cod_antecedentes_salud: number | null;
+}
+
+export interface AntecedentesSocialesResponse
+  extends AntecedentesSocialesProps {
+  cod_antecedentes_sociales: number | null;
+}
+
+export interface AntecedentesJunaebResponse extends AntecedentesJunaebProps {
+  cod_antecedentes_junaeb: number | null;
+}
+
+export interface FamiliarResponse extends FamiliarProps {
+  cod_familiar: number | null;
+}
+
+export interface FichaMatriculaResponse {
+  id: number;
+  periodo_lectivo: number;
+  grado_a_matricularse: number;
+  matricula_nueva: boolean;
+  cod_estado_ficha_matricula: number;
+  fecha_prematricula: string | null;
+  fecha_matricula: string | null;
+  estudiante: EstudianteResponse;
+  antecedentes_personales: AntecedentesPersonalesResponse;
+  antecedentes_academicos: AntecedentesAcademicosResponse;
+  antecedentes_localidad: AntecedentesLocalidadResponse;
+  antecedentes_pie: AntecedentesPieResponse;
+  antecedentes_salud: AntecedentesSaludResponse;
+  antecedentes_sociales: AntecedentesSocialesResponse;
+  antecedentes_junaeb: AntecedentesJunaebResponse;
+  familiares: FamiliarResponse[];
+  formacion_general_opciones: number[];
+}
+
+export interface CreateFichaMatriculaResponse {
+  success: boolean;
+  message: string;
+  data: FichaMatriculaResponse;
+}

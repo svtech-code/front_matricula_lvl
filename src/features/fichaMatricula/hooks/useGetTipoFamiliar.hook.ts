@@ -26,7 +26,7 @@ export const useGetTipoFamiliar = () => {
     };
 
     loadTipoFamiliares();
-  }, []);
+  }, [setTipoFamiliares, tipoFamiliares.length]);
 
   return { tipoFamiliares, isLoading };
 };

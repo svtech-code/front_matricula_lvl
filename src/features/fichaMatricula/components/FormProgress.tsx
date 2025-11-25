@@ -6,7 +6,7 @@ interface FormProgressProps {
 
 export const FormProgress = ({ progress }: FormProgressProps) => {
   return (
-    <div className="mb-6">
+    <div className="my-6">
       <div className="flex justify-between mb-2">
         <span className="text-sm font-medium">Progreso del formulario</span>
         <span className="text-sm font-medium">{Math.round(progress)}%</span>

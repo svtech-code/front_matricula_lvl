@@ -26,7 +26,7 @@ export const useGetGeneros = () => {
     };
 
     loadGeneros();
-  }, []);
+  }, [generos.length, setGeneros]);
 
   return { generos, isLoading };
 };

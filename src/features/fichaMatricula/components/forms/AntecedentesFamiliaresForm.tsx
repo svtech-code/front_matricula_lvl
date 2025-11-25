@@ -1,12 +1,13 @@
 import { Button, Input, Select, SelectItem, Switch } from '@heroui/react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FamiliarProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { calcularDV } from '@/infra';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 import { useGetTipoFamiliar } from '../../hooks/useGetTipoFamiliar.hook';
 
 export const AntecedentesFamiliaresForm = () => {
-  const { formData, updateSection } = useFichaMatricula();
+  const { formData, updateSection, setAntecedentesFamiliaresValid } =
+    useFichaMatricula();
 
   const { tipoFamiliares, isLoading } = useGetTipoFamiliar();
 
@@ -30,6 +31,48 @@ export const AntecedentesFamiliaresForm = () => {
     es_suplente: false,
   });
 
+  const [touchedFields, setTouchedFields] = useState({
+    run_familiar: false,
+    nombres: false,
+    apellido_paterno: false,
+    cod_tipo_familiar: false,
+    direccion: false,
+    comuna: false,
+    email: false,
+    numero_telefonico: false,
+  });
+
+  const hasTitular = useMemo(
+    () => familiares.some((f) => f.es_titular),
+    [familiares],
+  );
+
+  useEffect(() => {
+    setAntecedentesFamiliaresValid(hasTitular);
+  }, [hasTitular, setAntecedentesFamiliaresValid]);
+
+  const isFormValid = useMemo(() => {
+    const rut = currentFamiliar.run_familiar || 0;
+    const nombres = currentFamiliar.nombres?.trim() || '';
+    const apellidoPaterno = currentFamiliar.apellido_paterno?.trim() || '';
+    const tipoFamiliar = currentFamiliar.cod_tipo_familiar;
+    const direccion = currentFamiliar.direccion?.trim() || '';
+    const comuna = currentFamiliar.comuna?.trim() || '';
+    const email = currentFamiliar.email?.trim() || '';
+    const numeroTelefonico = currentFamiliar.numero_telefonico?.trim() || '';
+
+    return (
+      rut > 0 &&
+      nombres.length > 0 &&
+      apellidoPaterno.length > 0 &&
+      tipoFamiliar !== undefined &&
+      direccion.length > 0 &&
+      comuna.length > 0 &&
+      email.length > 0 &&
+      numeroTelefonico.length === 8
+    );
+  }, [currentFamiliar]);
+
   const handleRutChange = (value: string) => {
     const numericValue = value.replace(/\D/g, '');
     const rut = Number.parseInt(numericValue, 10) || 0;
@@ -52,6 +95,21 @@ export const AntecedentesFamiliaresForm = () => {
   };
 
   const handleAddOrUpdate = () => {
+    if (!isFormValid) {
+      alert('Por favor, complete todos los campos requeridos');
+      setTouchedFields({
+        run_familiar: true,
+        nombres: true,
+        apellido_paterno: true,
+        cod_tipo_familiar: true,
+        direccion: true,
+        comuna: true,
+        email: true,
+        numero_telefonico: true,
+      });
+      return;
+    }
+
     const otherFamiliares =
       editingIndex !== null
         ? familiares.filter((_, i) => i !== editingIndex)
@@ -81,11 +139,14 @@ export const AntecedentesFamiliaresForm = () => {
 
     if (editingIndex !== null) {
       const updated = [...familiares];
-      updated[editingIndex] = currentFamiliar as Familiar;
+      updated[editingIndex] = currentFamiliar as FamiliarProps;
       updateSection('familiares', updated);
       setEditingIndex(null);
     } else {
-      updateSection('familiares', [...familiares, currentFamiliar as Familiar]);
+      updateSection('familiares', [
+        ...familiares,
+        currentFamiliar as FamiliarProps,
+      ]);
     }
     resetForm();
   };
@@ -116,6 +177,67 @@ export const AntecedentesFamiliaresForm = () => {
       es_titular: false,
       es_suplente: false,
     });
+    setTouchedFields({
+      run_familiar: false,
+      nombres: false,
+      apellido_paterno: false,
+      cod_tipo_familiar: false,
+      direccion: false,
+      comuna: false,
+      email: false,
+      numero_telefonico: false,
+    });
+  };
+
+  const handleBlur = (field: keyof typeof touchedFields) => {
+    setTouchedFields((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const getErrorMessage = (field: keyof typeof touchedFields) => {
+    if (!touchedFields[field]) return '';
+
+    if (field === 'run_familiar') {
+      const value = currentFamiliar.run_familiar || 0;
+      if (value === 0) return 'El RUN es requerido';
+    }
+
+    if (field === 'nombres') {
+      const value = currentFamiliar.nombres?.trim() || '';
+      if (value.length === 0) return 'Los nombres son requeridos';
+    }
+
+    if (field === 'apellido_paterno') {
+      const value = currentFamiliar.apellido_paterno?.trim() || '';
+      if (value.length === 0) return 'El apellido paterno es requerido';
+    }
+
+    if (field === 'cod_tipo_familiar') {
+      if (currentFamiliar.cod_tipo_familiar === undefined)
+        return 'El tipo de familiar es requerido';
+    }
+
+    if (field === 'direccion') {
+      const value = currentFamiliar.direccion?.trim() || '';
+      if (value.length === 0) return 'La dirección es requerida';
+    }
+
+    if (field === 'comuna') {
+      const value = currentFamiliar.comuna?.trim() || '';
+      if (value.length === 0) return 'La comuna es requerida';
+    }
+
+    if (field === 'email') {
+      const value = currentFamiliar.email?.trim() || '';
+      if (value.length === 0) return 'El email es requerido';
+    }
+
+    if (field === 'numero_telefonico') {
+      const value = currentFamiliar.numero_telefonico?.trim() || '';
+      if (value.length === 0) return 'El número telefónico es requerido';
+      if (value.length < 8) return 'El número debe tener 8 dígitos';
+    }
+
+    return '';
   };
 
   return (
@@ -137,6 +259,10 @@ export const AntecedentesFamiliaresForm = () => {
                 : ''
             }
             onChange={(e) => handleRutChange(e.target.value)}
+            onBlur={() => handleBlur('run_familiar')}
+            isRequired
+            isInvalid={!!getErrorMessage('run_familiar')}
+            errorMessage={getErrorMessage('run_familiar')}
           />
         </div>
         <div className="md:col-span-1">
@@ -156,6 +282,10 @@ export const AntecedentesFamiliaresForm = () => {
           onChange={(e) =>
             setCurrentFamiliar({ ...currentFamiliar, nombres: e.target.value })
           }
+          onBlur={() => handleBlur('nombres')}
+          isRequired
+          isInvalid={!!getErrorMessage('nombres')}
+          errorMessage={getErrorMessage('nombres')}
         />
         <Input
           label="Apellido Paterno"
@@ -166,6 +296,10 @@ export const AntecedentesFamiliaresForm = () => {
               apellido_paterno: e.target.value,
             })
           }
+          onBlur={() => handleBlur('apellido_paterno')}
+          isRequired
+          isInvalid={!!getErrorMessage('apellido_paterno')}
+          errorMessage={getErrorMessage('apellido_paterno')}
         />
         <Input
           label="Apellido Materno"
@@ -192,6 +326,10 @@ export const AntecedentesFamiliaresForm = () => {
               cod_tipo_familiar: value,
             });
           }}
+          onClose={() => handleBlur('cod_tipo_familiar')}
+          isRequired
+          isInvalid={!!getErrorMessage('cod_tipo_familiar')}
+          errorMessage={getErrorMessage('cod_tipo_familiar')}
         >
           {tipoFamiliares.map((tipo) => (
             <SelectItem key={tipo.cod_tipo_familiar.toString()}>
@@ -208,6 +346,10 @@ export const AntecedentesFamiliaresForm = () => {
               direccion: e.target.value,
             })
           }
+          onBlur={() => handleBlur('direccion')}
+          isRequired
+          isInvalid={!!getErrorMessage('direccion')}
+          errorMessage={getErrorMessage('direccion')}
         />
         <Input
           label="Comuna"
@@ -215,6 +357,10 @@ export const AntecedentesFamiliaresForm = () => {
           onChange={(e) =>
             setCurrentFamiliar({ ...currentFamiliar, comuna: e.target.value })
           }
+          onBlur={() => handleBlur('comuna')}
+          isRequired
+          isInvalid={!!getErrorMessage('comuna')}
+          errorMessage={getErrorMessage('comuna')}
         />
         <Input
           label="Actividad Laboral"
@@ -243,6 +389,10 @@ export const AntecedentesFamiliaresForm = () => {
           onChange={(e) =>
             setCurrentFamiliar({ ...currentFamiliar, email: e.target.value })
           }
+          onBlur={() => handleBlur('email')}
+          isRequired
+          isInvalid={!!getErrorMessage('email')}
+          errorMessage={getErrorMessage('email')}
         />
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-3">
@@ -254,12 +404,16 @@ export const AntecedentesFamiliaresForm = () => {
               type="text"
               value={currentFamiliar.numero_telefonico || ''}
               onChange={(e) => handlePhoneChange(e.target.value)}
+              onBlur={() => handleBlur('numero_telefonico')}
               maxLength={8}
+              isRequired
+              isInvalid={!!getErrorMessage('numero_telefonico')}
+              errorMessage={getErrorMessage('numero_telefonico')}
             />
           </div>
         </div>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2 space-x-4">
         <Switch
           isSelected={currentFamiliar.es_titular || false}
           onValueChange={(value) =>

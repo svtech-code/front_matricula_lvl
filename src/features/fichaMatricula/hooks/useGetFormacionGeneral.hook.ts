@@ -29,7 +29,7 @@ export const useGetFormacionGeneral = () => {
     };
 
     loadFormacionGeneral();
-  }, []);
+  }, [formacionGeneral.length, setFormacionGeneral]);
 
   return { formacionGeneral, isLoading };
 };

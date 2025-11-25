@@ -1,4 +1,5 @@
 import { Button, Input, Select, SelectItem } from '@heroui/react';
+import { useEffect, useMemo, useState } from 'react';
 import type { AntecedentesAcademicosProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 import {
@@ -7,12 +8,57 @@ import {
 } from '../../const/cursos.const';
 
 export const AntecedentesAcademicosForm = () => {
-  const { formData, updateSection, clearSection } = useFichaMatricula();
+  const {
+    formData,
+    updateSection,
+    clearSection,
+    setAntecedentesAcademicosValid,
+  } = useFichaMatricula();
   const data: Partial<AntecedentesAcademicosProps> =
     formData.antecedentes_academicos || {};
 
+  const [touchedFields, setTouchedFields] = useState({
+    colegio_procedencia: false,
+    curso_periodo_anterior: false,
+  });
+
+  const isFormValid = useMemo(() => {
+    const colegioProcedencia = data.colegio_procedencia?.trim() || '';
+    const cursoPeriodoAnterior = data.curso_periodo_anterior?.trim() || '';
+
+    return colegioProcedencia.length > 0 && cursoPeriodoAnterior.length > 0;
+  }, [data.colegio_procedencia, data.curso_periodo_anterior]);
+
+  useEffect(() => {
+    setAntecedentesAcademicosValid(isFormValid);
+  }, [isFormValid, setAntecedentesAcademicosValid]);
+
   const handleChange = (field: string, value: string | string[]) => {
     updateSection('antecedentes_academicos', { [field]: value });
+  };
+
+  const handleBlur = (field: keyof typeof touchedFields) => {
+    setTouchedFields((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const handleSelectClose = (field: keyof typeof touchedFields) => {
+    setTouchedFields((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const getErrorMessage = (field: keyof typeof touchedFields) => {
+    if (!touchedFields[field]) return '';
+
+    if (field === 'colegio_procedencia') {
+      const value = data.colegio_procedencia?.trim() || '';
+      if (value.length === 0) return 'Este campo es obligatorio';
+    }
+
+    if (field === 'curso_periodo_anterior') {
+      const value = data.curso_periodo_anterior?.trim() || '';
+      if (value.length === 0) return 'Debe seleccionar un curso';
+    }
+
+    return '';
   };
 
   return (
@@ -34,7 +80,10 @@ export const AntecedentesAcademicosForm = () => {
         label="Colegio de Procedencia"
         value={data.colegio_procedencia || ''}
         onChange={(e) => handleChange('colegio_procedencia', e.target.value)}
-        required
+        onBlur={() => handleBlur('colegio_procedencia')}
+        isRequired
+        isInvalid={!!getErrorMessage('colegio_procedencia')}
+        errorMessage={getErrorMessage('colegio_procedencia')}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Select
@@ -45,7 +94,6 @@ export const AntecedentesAcademicosForm = () => {
             const values = Array.from(keys) as string[];
             handleChange('cursos_reprobados', values);
           }}
-          required
         >
           {CURSOS_REPROBADOS.map((curso) => (
             <SelectItem key={curso.key}>{curso.label}</SelectItem>
@@ -60,7 +108,10 @@ export const AntecedentesAcademicosForm = () => {
             const value = Array.from(keys)[0] as string;
             handleChange('curso_periodo_anterior', value);
           }}
-          required
+          onClose={() => handleSelectClose('curso_periodo_anterior')}
+          isRequired
+          isInvalid={!!getErrorMessage('curso_periodo_anterior')}
+          errorMessage={getErrorMessage('curso_periodo_anterior')}
         >
           {CURSO_PERIODO_ANTERIOR.map((curso) => (
             <SelectItem key={curso.key}>{curso.label}</SelectItem>

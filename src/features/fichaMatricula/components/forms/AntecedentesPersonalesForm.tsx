@@ -1,11 +1,43 @@
 import { Button, Input, Switch } from '@heroui/react';
+import { useEffect, useMemo, useState } from 'react';
 import type { AntecedentesPersonalesProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 
 export const AntecedentesPersonalesForm = () => {
-  const { formData, updateSection, clearSection } = useFichaMatricula();
+  const {
+    formData,
+    updateSection,
+    clearSection,
+    setAntecedentesPersonalesValid,
+  } = useFichaMatricula();
   const data: Partial<AntecedentesPersonalesProps> =
     formData.antecedentes_personales || {};
+
+  const [touchedFields, setTouchedFields] = useState({
+    numero_telefonico: false,
+    numero_telefonico_emergencia: false,
+    persona_convive: false,
+  });
+
+  const isFormValid = useMemo(() => {
+    const numeroTelefonico = data.numero_telefonico?.trim() || '';
+    const numeroEmergencia = data.numero_telefonico_emergencia?.trim() || '';
+    const personaConvive = data.persona_convive?.trim() || '';
+
+    return (
+      numeroTelefonico.length === 8 &&
+      numeroEmergencia.length === 8 &&
+      personaConvive.length > 0
+    );
+  }, [
+    data.numero_telefonico,
+    data.numero_telefonico_emergencia,
+    data.persona_convive,
+  ]);
+
+  useEffect(() => {
+    setAntecedentesPersonalesValid(isFormValid);
+  }, [isFormValid, setAntecedentesPersonalesValid]);
 
   const handleChange = (field: string, value: string | boolean) => {
     updateSection('antecedentes_personales', { [field]: value });
@@ -16,6 +48,30 @@ export const AntecedentesPersonalesForm = () => {
     if (numericValue.length <= 8) {
       handleChange(field, numericValue);
     }
+  };
+
+  const handleBlur = (field: keyof typeof touchedFields) => {
+    setTouchedFields((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const getErrorMessage = (field: keyof typeof touchedFields) => {
+    if (!touchedFields[field]) return '';
+
+    if (
+      field === 'numero_telefonico' ||
+      field === 'numero_telefonico_emergencia'
+    ) {
+      const value = data[field]?.trim() || '';
+      if (value.length === 0) return 'Este campo es obligatorio';
+      if (value.length < 8) return 'Debe tener 8 dígitos';
+    }
+
+    if (field === 'persona_convive') {
+      const value = data.persona_convive?.trim() || '';
+      if (value.length === 0) return 'Este campo es obligatorio';
+    }
+
+    return '';
   };
 
   return (
@@ -46,7 +102,11 @@ export const AntecedentesPersonalesForm = () => {
               onChange={(e) =>
                 handlePhoneChange('numero_telefonico', e.target.value)
               }
+              onBlur={() => handleBlur('numero_telefonico')}
               maxLength={8}
+              isRequired
+              isInvalid={!!getErrorMessage('numero_telefonico')}
+              errorMessage={getErrorMessage('numero_telefonico')}
             />
           </div>
         </div>
@@ -65,8 +125,11 @@ export const AntecedentesPersonalesForm = () => {
                   e.target.value,
                 )
               }
+              onBlur={() => handleBlur('numero_telefonico_emergencia')}
               maxLength={8}
-              required
+              isRequired
+              isInvalid={!!getErrorMessage('numero_telefonico_emergencia')}
+              errorMessage={getErrorMessage('numero_telefonico_emergencia')}
             />
           </div>
         </div>
@@ -78,10 +141,14 @@ export const AntecedentesPersonalesForm = () => {
         />
 
         <Input
-          label="Persona con quien vive"
+          label="Personas con quien vive"
           type="text"
           value={data.persona_convive || ''}
           onChange={(e) => handleChange('persona_convive', e.target.value)}
+          onBlur={() => handleBlur('persona_convive')}
+          isRequired
+          isInvalid={!!getErrorMessage('persona_convive')}
+          errorMessage={getErrorMessage('persona_convive')}
         />
         <Input
           label="Talentos Académicos"
