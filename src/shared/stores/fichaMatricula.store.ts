@@ -68,10 +68,17 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
     (set, get) => ({
       formData: initialFormData,
       currentStep: 0,
+      maxStepReached: 0,
       generos: [],
       tipoFamiliares: [],
       formacionGeneral: [],
       rutEstudiante: null,
+      estudianteValid: false,
+      antecedentesPersonalesValid: false,
+      antecedentesAcademicosValid: false,
+      antecedentesLocalidadValid: false,
+      antecedentesSocialesValid: false,
+      antecedentesFamiliaresValid: false,
       setFormData: (data) =>
         set((state) => ({
           formData: { ...state.formData, ...data },
@@ -95,25 +102,94 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
             [section]: initialFormData[section],
           },
         })),
-      setCurrentStep: (step) => set({ currentStep: step }),
+      setCurrentStep: (step) => {
+        const maxStepReached = get().maxStepReached;
+        if (step <= maxStepReached) {
+          set({ currentStep: step });
+        }
+      },
       resetForm: () =>
-        set({ formData: initialFormData, currentStep: 0, rutEstudiante: null }),
-      nextStep: () => set((state) => ({ currentStep: state.currentStep + 1 })),
+        set({
+          formData: initialFormData,
+          currentStep: 0,
+          maxStepReached: 0,
+          rutEstudiante: null,
+          estudianteValid: false,
+          antecedentesPersonalesValid: false,
+          antecedentesAcademicosValid: false,
+          antecedentesLocalidadValid: false,
+          antecedentesSocialesValid: false,
+          antecedentesFamiliaresValid: false,
+        }),
+      nextStep: () =>
+        set((state) => {
+          const newStep = state.currentStep + 1;
+          return {
+            currentStep: newStep,
+            maxStepReached: Math.max(state.maxStepReached, newStep),
+          };
+        }),
       previousStep: () =>
         set((state) => ({ currentStep: state.currentStep - 1 })),
-      canGoNext: (totalSteps) => get().currentStep < totalSteps - 1,
+      canGoNext: (totalSteps) => {
+        const currentStep = get().currentStep;
+        const estudianteValid = get().estudianteValid;
+        const antecedentesPersonalesValid = get().antecedentesPersonalesValid;
+        const antecedentesAcademicosValid = get().antecedentesAcademicosValid;
+        const antecedentesLocalidadValid = get().antecedentesLocalidadValid;
+        const antecedentesSocialesValid = get().antecedentesSocialesValid;
+        const antecedentesFamiliaresValid = get().antecedentesFamiliaresValid;
+
+        if (currentStep === 0 && !estudianteValid) {
+          return false;
+        }
+
+        if (currentStep === 1 && !antecedentesPersonalesValid) {
+          return false;
+        }
+
+        if (currentStep === 2 && !antecedentesAcademicosValid) {
+          return false;
+        }
+
+        if (currentStep === 3 && !antecedentesLocalidadValid) {
+          return false;
+        }
+
+        if (currentStep === 6 && !antecedentesSocialesValid) {
+          return false;
+        }
+
+        if (currentStep === 8 && !antecedentesFamiliaresValid) {
+          return false;
+        }
+
+        return currentStep < totalSteps - 1;
+      },
       canGoPrevious: () => get().currentStep > 0,
       getProgress: (totalSteps) => ((get().currentStep + 1) / totalSteps) * 100,
       setGeneros: (generos) => set({ generos }),
       setTipoFamiliares: (tipoFamiliares) => set({ tipoFamiliares }),
       setFormacionGeneral: (formacionGeneral) => set({ formacionGeneral }),
       setRutEstudiante: (rut) => set({ rutEstudiante: rut }),
+      setEstudianteValid: (valid) => set({ estudianteValid: valid }),
+      setAntecedentesPersonalesValid: (valid) =>
+        set({ antecedentesPersonalesValid: valid }),
+      setAntecedentesAcademicosValid: (valid) =>
+        set({ antecedentesAcademicosValid: valid }),
+      setAntecedentesLocalidadValid: (valid) =>
+        set({ antecedentesLocalidadValid: valid }),
+      setAntecedentesSocialesValid: (valid) =>
+        set({ antecedentesSocialesValid: valid }),
+      setAntecedentesFamiliaresValid: (valid) =>
+        set({ antecedentesFamiliaresValid: valid }),
     }),
     {
       name: 'fichaMatricula-storage',
       partialize: (state) => ({
         formData: state.formData,
         currentStep: state.currentStep,
+        maxStepReached: state.maxStepReached,
         rutEstudiante: state.rutEstudiante,
       }),
     },

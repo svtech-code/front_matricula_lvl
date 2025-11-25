@@ -1,4 +1,5 @@
 export const CURSOS_REPROBADOS = [
+  { key: 'ninguno', label: 'ninguno' },
   { key: '1ro Básico', label: '1ro Básico' },
   { key: '2do Básico', label: '2do Básico' },
   { key: '3ro Básico', label: '3ro Básico' },

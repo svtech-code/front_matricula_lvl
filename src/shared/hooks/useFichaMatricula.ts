@@ -3,12 +3,33 @@ import { useFichaMatriculaStore } from '../stores/fichaMatricula.store';
 export const useFichaMatricula = () => {
   const formData = useFichaMatriculaStore((state) => state.formData);
   const currentStep = useFichaMatriculaStore((state) => state.currentStep);
+  const maxStepReached = useFichaMatriculaStore(
+    (state) => state.maxStepReached,
+  );
   const generos = useFichaMatriculaStore((state) => state.generos);
   const tipoFamiliares = useFichaMatriculaStore(
     (state) => state.tipoFamiliares,
   );
   const formacionGeneral = useFichaMatriculaStore(
     (state) => state.formacionGeneral,
+  );
+  const estudianteValid = useFichaMatriculaStore(
+    (state) => state.estudianteValid,
+  );
+  const antecedentesPersonalesValid = useFichaMatriculaStore(
+    (state) => state.antecedentesPersonalesValid,
+  );
+  const antecedentesAcademicosValid = useFichaMatriculaStore(
+    (state) => state.antecedentesAcademicosValid,
+  );
+  const antecedentesLocalidadValid = useFichaMatriculaStore(
+    (state) => state.antecedentesLocalidadValid,
+  );
+  const antecedentesSocialesValid = useFichaMatriculaStore(
+    (state) => state.antecedentesSocialesValid,
+  );
+  const antecedentesFamiliaresValid = useFichaMatriculaStore(
+    (state) => state.antecedentesFamiliaresValid,
   );
 
   const setFormData = useFichaMatriculaStore((state) => state.setFormData);
@@ -30,13 +51,38 @@ export const useFichaMatricula = () => {
   const setFormacionGeneral = useFichaMatriculaStore(
     (state) => state.setFormacionGeneral,
   );
+  const setEstudianteValid = useFichaMatriculaStore(
+    (state) => state.setEstudianteValid,
+  );
+  const setAntecedentesPersonalesValid = useFichaMatriculaStore(
+    (state) => state.setAntecedentesPersonalesValid,
+  );
+  const setAntecedentesAcademicosValid = useFichaMatriculaStore(
+    (state) => state.setAntecedentesAcademicosValid,
+  );
+  const setAntecedentesLocalidadValid = useFichaMatriculaStore(
+    (state) => state.setAntecedentesLocalidadValid,
+  );
+  const setAntecedentesSocialesValid = useFichaMatriculaStore(
+    (state) => state.setAntecedentesSocialesValid,
+  );
+  const setAntecedentesFamiliaresValid = useFichaMatriculaStore(
+    (state) => state.setAntecedentesFamiliaresValid,
+  );
 
   return {
     formData,
     currentStep,
+    maxStepReached,
     generos,
     tipoFamiliares,
     formacionGeneral,
+    estudianteValid,
+    antecedentesPersonalesValid,
+    antecedentesAcademicosValid,
+    antecedentesLocalidadValid,
+    antecedentesSocialesValid,
+    antecedentesFamiliaresValid,
 
     setFormData,
     updateSection,
@@ -51,5 +97,11 @@ export const useFichaMatricula = () => {
     setGeneros,
     setTipoFamiliares,
     setFormacionGeneral,
+    setEstudianteValid,
+    setAntecedentesPersonalesValid,
+    setAntecedentesAcademicosValid,
+    setAntecedentesLocalidadValid,
+    setAntecedentesSocialesValid,
+    setAntecedentesFamiliaresValid,
   };
 };

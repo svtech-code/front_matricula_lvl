@@ -6,10 +6,17 @@ import type { TipoFamiliarValor } from '@/domains/tipoFamiliar/tipoFamiliar.enti
 export interface FichaMatriculaState {
   formData: Partial<FichaMatriculaProps>;
   currentStep: number;
+  maxStepReached: number;
   generos: GeneroValor[];
   tipoFamiliares: TipoFamiliarValor[];
   formacionGeneral: FormacionGeneralValor[];
   rutEstudiante: number | null;
+  estudianteValid: boolean;
+  antecedentesPersonalesValid: boolean;
+  antecedentesAcademicosValid: boolean;
+  antecedentesLocalidadValid: boolean;
+  antecedentesSocialesValid: boolean;
+  antecedentesFamiliaresValid: boolean;
   setFormData: (data: Partial<FichaMatriculaProps>) => void;
   updateSection: <K extends keyof FichaMatriculaProps>(
     section: K,
@@ -27,4 +34,10 @@ export interface FichaMatriculaState {
   setTipoFamiliares: (tipoFamiliares: TipoFamiliarValor[]) => void;
   setFormacionGeneral: (formacionGeneral: FormacionGeneralValor[]) => void;
   setRutEstudiante: (rut: number) => void;
+  setEstudianteValid: (valid: boolean) => void;
+  setAntecedentesPersonalesValid: (valid: boolean) => void;
+  setAntecedentesAcademicosValid: (valid: boolean) => void;
+  setAntecedentesLocalidadValid: (valid: boolean) => void;
+  setAntecedentesSocialesValid: (valid: boolean) => void;
+  setAntecedentesFamiliaresValid: (valid: boolean) => void;
 }
