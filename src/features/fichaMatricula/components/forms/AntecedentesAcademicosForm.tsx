@@ -102,7 +102,7 @@ export const AntecedentesAcademicosForm = () => {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Select
-          label="Cursos Reprobados"
+          label="Seleccionar cursos que ha reprobado"
           selectionMode="multiple"
           selectedKeys={data.cursos_reprobados || []}
           onSelectionChange={(keys) => {
@@ -119,7 +119,7 @@ export const AntecedentesAcademicosForm = () => {
           ))}
         </Select>
         <Select
-          label="Curso Período Anterior"
+          label="Curso año 2025"
           selectedKeys={
             data.curso_periodo_anterior ? [data.curso_periodo_anterior] : []
           }
