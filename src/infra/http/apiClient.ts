@@ -11,7 +11,7 @@ const URLPATH = process.env.PUBLIC_API_URL;
  */
 export const apiClient = axios.create({
   baseURL: URLPATH,
-  timeout: 20000,
+  timeout: 60000,
   maxContentLength: 10000000,
   maxBodyLength: 10000000,
 });
@@ -23,13 +23,10 @@ export const apiClient = axios.create({
  */
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Ver token
     const token = null;
 
-    // Solo agregar headers - dejar que el servidor valide el token
     config.headers = config.headers || {};
 
-    // agregar Authorization header para rutas de login
     const isLoginRequest = config.url?.includes('/login');
     if (!isLoginRequest && token)
       config.headers.Authorization = `Bearer ${token}`;
@@ -48,12 +45,6 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    // revisar codigo
-    // const context = HttpErrorMapper.axiosErrorToContext(error);
-    // const httpErrorHandler = getHttpErrorHandlerService();
-    //
-    // await httpErrorHandler.handleError(context);
-
     return Promise.reject(error);
   },
 );
