@@ -5,12 +5,11 @@ export const buildUrl = (
 ) => {
   let url = route;
 
-  // Param: /route/:id
   if (param !== undefined && param !== null) {
-    url = `${url}/${param}`;
+    const separator = url.endsWith('/') ? '' : '/';
+    url = `${url}${separator}${param}`;
   }
 
-  // Query Params
   if (params && typeof params === 'object') {
     const searchParams = new URLSearchParams(
       Object.entries(params).reduce(
