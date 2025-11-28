@@ -5,6 +5,7 @@ export enum ApiEndPoint {
   GENERO = 'generos',
   TIPO_FAMILIAR = 'tipos-familiares',
   FORMACION_GENERAL = 'formacion-general-opciones',
+  FAMILIAR = 'familiares',
 }
 
 export interface ApiRequestParams<T, K extends object | undefined = undefined> {
