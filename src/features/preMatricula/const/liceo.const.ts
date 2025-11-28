@@ -9,7 +9,7 @@ export const LICEO_INFO = {
 } as const;
 
 export const PERIODO_MATRICULA = {
-  inicio: '09 de diciembre 2025',
+  inicio: '09',
   termino: '23 de diciembre 2025',
   anio: 2026,
 } as const;
@@ -18,7 +18,7 @@ export const INFO_SECTIONS = [
   {
     icon: '📅',
     title: 'Período de Matrícula',
-    content: `El proceso de matrícula ${PERIODO_MATRICULA.anio} estará disponible desde el ${PERIODO_MATRICULA.inicio} hasta el ${PERIODO_MATRICULA.termino}. No olvides completar tu pre-matrícula y asistir presencialmente para validar tus datos.`,
+    content: `El proceso de matrícula ${PERIODO_MATRICULA.anio} estará disponible desde el ${PERIODO_MATRICULA.inicio} al ${PERIODO_MATRICULA.termino}. No olvides completar tu pre-matrícula y asistir presencialmente para validar tus datos.`,
   },
   {
     icon: '📄',
@@ -40,7 +40,7 @@ export const INFO_SECTIONS = [
     icon: '🏫',
     title: 'Programas Especiales',
     content:
-      'El Liceo cuenta con Programa de Integración Escolar (PIE) y beneficios JUNAEB (alimentación, útiles escolares, becas). Indica en tu ficha si deseas participar en alguno de estos programas.',
+      'El Liceo cuenta con Programa de Integración Escolar (PIE) y beneficios JUNAEB (alimentación, útiles escolares, becas). Indica en tu ficha información si corresponde.',
   },
   // {
   //   icon: 'i',

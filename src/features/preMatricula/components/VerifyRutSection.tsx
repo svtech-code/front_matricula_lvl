@@ -15,7 +15,7 @@ export const VerifyRutSection = () => {
 
     const response = await verifyPreMatricula({
       rut,
-      periodo_lectivo: 2025,
+      periodo_lectivo: 2,
       estado: 1,
     });
 
