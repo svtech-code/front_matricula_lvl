@@ -31,6 +31,9 @@ export const useFichaMatricula = () => {
   const antecedentesFamiliaresValid = useFichaMatriculaStore(
     (state) => state.antecedentesFamiliaresValid,
   );
+  const informacionGeneralValid = useFichaMatriculaStore(
+    (state) => state.informacionGeneralValid,
+  );
 
   const setFormData = useFichaMatriculaStore((state) => state.setFormData);
   const updateSection = useFichaMatriculaStore((state) => state.updateSection);
@@ -69,6 +72,9 @@ export const useFichaMatricula = () => {
   const setAntecedentesFamiliaresValid = useFichaMatriculaStore(
     (state) => state.setAntecedentesFamiliaresValid,
   );
+  const setInformacionGeneralValid = useFichaMatriculaStore(
+    (state) => state.setInformacionGeneralValid,
+  );
 
   return {
     formData,
@@ -83,6 +89,7 @@ export const useFichaMatricula = () => {
     antecedentesLocalidadValid,
     antecedentesSocialesValid,
     antecedentesFamiliaresValid,
+    informacionGeneralValid,
 
     setFormData,
     updateSection,
@@ -103,5 +110,6 @@ export const useFichaMatricula = () => {
     setAntecedentesLocalidadValid,
     setAntecedentesSocialesValid,
     setAntecedentesFamiliaresValid,
+    setInformacionGeneralValid,
   };
 };

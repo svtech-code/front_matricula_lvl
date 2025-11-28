@@ -20,14 +20,24 @@ export const AntecedentesAcademicosForm = () => {
   const [touchedFields, setTouchedFields] = useState({
     colegio_procedencia: false,
     curso_periodo_anterior: false,
+    cursos_reprobados: false,
   });
 
   const isFormValid = useMemo(() => {
     const colegioProcedencia = data.colegio_procedencia?.trim() || '';
     const cursoPeriodoAnterior = data.curso_periodo_anterior?.trim() || '';
+    const cursosReprobados = data.cursos_reprobados || [];
 
-    return colegioProcedencia.length > 0 && cursoPeriodoAnterior.length > 0;
-  }, [data.colegio_procedencia, data.curso_periodo_anterior]);
+    return (
+      colegioProcedencia.length > 0 &&
+      cursoPeriodoAnterior.length > 0 &&
+      cursosReprobados.length > 0
+    );
+  }, [
+    data.colegio_procedencia,
+    data.curso_periodo_anterior,
+    data.cursos_reprobados,
+  ]);
 
   useEffect(() => {
     setAntecedentesAcademicosValid(isFormValid);
@@ -56,6 +66,11 @@ export const AntecedentesAcademicosForm = () => {
     if (field === 'curso_periodo_anterior') {
       const value = data.curso_periodo_anterior?.trim() || '';
       if (value.length === 0) return 'Debe seleccionar un curso';
+    }
+
+    if (field === 'cursos_reprobados') {
+      const value = data.cursos_reprobados || [];
+      if (value.length === 0) return 'Debe seleccionar al menos un curso';
     }
 
     return '';
@@ -94,6 +109,10 @@ export const AntecedentesAcademicosForm = () => {
             const values = Array.from(keys) as string[];
             handleChange('cursos_reprobados', values);
           }}
+          onClose={() => handleSelectClose('cursos_reprobados')}
+          isRequired
+          isInvalid={!!getErrorMessage('cursos_reprobados')}
+          errorMessage={getErrorMessage('cursos_reprobados')}
         >
           {CURSOS_REPROBADOS.map((curso) => (
             <SelectItem key={curso.key}>{curso.label}</SelectItem>

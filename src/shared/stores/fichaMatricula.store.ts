@@ -4,7 +4,7 @@ import type { FichaMatriculaProps } from '@/domains/fichaMatricula/fichaMatricul
 import type { FichaMatriculaState } from '../models/fichaMatricula.model';
 
 const initialFormData: Partial<FichaMatriculaProps> = {
-  periodo_lectivo: new Date().getFullYear(),
+  periodo_lectivo: 2,
   grado_a_matricularse: 1,
   estudiante: {
     run_estudiante: 0,
@@ -61,6 +61,9 @@ const initialFormData: Partial<FichaMatriculaProps> = {
   },
   familiares: [],
   formacion_general_opciones: [],
+  autorizacion_uso_fotos: undefined,
+  confirmacion_datos_entregados: false,
+  enterado_envio_reglamento: false,
 };
 
 export const useFichaMatriculaStore = create<FichaMatriculaState>()(
@@ -79,6 +82,7 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
       antecedentesLocalidadValid: false,
       antecedentesSocialesValid: false,
       antecedentesFamiliaresValid: false,
+      informacionGeneralValid: false,
       setFormData: (data) =>
         set((state) => ({
           formData: { ...state.formData, ...data },
@@ -120,6 +124,7 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
           antecedentesLocalidadValid: false,
           antecedentesSocialesValid: false,
           antecedentesFamiliaresValid: false,
+          informacionGeneralValid: false,
         }),
       nextStep: () =>
         set((state) => {
@@ -139,6 +144,7 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
         const antecedentesLocalidadValid = get().antecedentesLocalidadValid;
         const antecedentesSocialesValid = get().antecedentesSocialesValid;
         const antecedentesFamiliaresValid = get().antecedentesFamiliaresValid;
+        const informacionGeneralValid = get().informacionGeneralValid;
 
         if (currentStep === 0 && !estudianteValid) {
           return false;
@@ -164,6 +170,10 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
           return false;
         }
 
+        if (currentStep === totalSteps - 1 && !informacionGeneralValid) {
+          return false;
+        }
+
         return currentStep < totalSteps - 1;
       },
       canGoPrevious: () => get().currentStep > 0,
@@ -183,6 +193,8 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
         set({ antecedentesSocialesValid: valid }),
       setAntecedentesFamiliaresValid: (valid) =>
         set({ antecedentesFamiliaresValid: valid }),
+      setInformacionGeneralValid: (valid) =>
+        set({ informacionGeneralValid: valid }),
     }),
     {
       name: 'fichaMatricula-storage',

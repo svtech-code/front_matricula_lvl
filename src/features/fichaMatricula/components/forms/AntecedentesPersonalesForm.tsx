@@ -168,7 +168,10 @@ export const AntecedentesPersonalesForm = () => {
           handleChange('pertenece_programa_sename', value)
         }
       >
-        Pertenece a programa SENAME
+        ¿Pertenece o perteneció a programas de red <strong>SENAME</strong>?{' '}
+        <span className="text-xs text-gray-600">
+          (IPD, PPF, HOGAR DE MENORES, ETC.)
+        </span>
       </Switch>
     </div>
   );

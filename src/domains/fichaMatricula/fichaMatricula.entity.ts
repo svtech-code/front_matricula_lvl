@@ -111,6 +111,9 @@ export interface FichaMatriculaProps {
   antecedentes_junaeb: AntecedentesJunaebProps;
   familiares: FamiliarProps[];
   formacion_general_opciones: number[];
+  autorizacion_uso_fotos?: boolean;
+  confirmacion_datos_entregados: boolean;
+  enterado_envio_reglamento: boolean;
 }
 
 export interface CreateFichaMatriculaPayload {
@@ -127,6 +130,9 @@ export interface CreateFichaMatriculaPayload {
   antecedentes_junaeb: AntecedentesJunaebProps;
   familiares: FamiliarProps[];
   formacion_general_opciones: number[];
+  autorizacion_uso_fotos?: boolean;
+  confirmacion_datos_entregados: boolean;
+  enterado_envio_reglamento: boolean;
 }
 
 export interface EstudianteResponse extends EstudianteProps {

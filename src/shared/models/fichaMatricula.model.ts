@@ -17,6 +17,7 @@ export interface FichaMatriculaState {
   antecedentesLocalidadValid: boolean;
   antecedentesSocialesValid: boolean;
   antecedentesFamiliaresValid: boolean;
+  informacionGeneralValid: boolean;
   setFormData: (data: Partial<FichaMatriculaProps>) => void;
   updateSection: <K extends keyof FichaMatriculaProps>(
     section: K,
@@ -40,4 +41,5 @@ export interface FichaMatriculaState {
   setAntecedentesLocalidadValid: (valid: boolean) => void;
   setAntecedentesSocialesValid: (valid: boolean) => void;
   setAntecedentesFamiliaresValid: (valid: boolean) => void;
+  setInformacionGeneralValid: (valid: boolean) => void;
 }

@@ -32,7 +32,9 @@ export const antecedentesPersonalesSchema = z.object({
 
 export const antecedentesAcademicosSchema = z.object({
   colegio_procedencia: z.string().min(1, 'Colegio de procedencia es requerido'),
-  cursos_reprobados: z.string().min(1, 'Cursos reprobados es requerido'),
+  cursos_reprobados: z
+    .array(z.string())
+    .min(1, 'Debe seleccionar al menos un curso reprobado'),
   curso_periodo_anterior: z
     .string()
     .min(1, 'Curso del período anterior es requerido'),
@@ -128,6 +130,13 @@ export const fichaMatriculaSchema = z.object({
     .array(familiarSchema)
     .min(1, 'Al menos un familiar es requerido'),
   formacion_general_opciones: z.array(z.number()).optional(),
+  autorizacion_uso_fotos: z.boolean().optional(),
+  confirmacion_datos_entregados: z.boolean().refine((val) => val === true, {
+    message: 'Debe confirmar que los datos ingresados son correctos',
+  }),
+  enterado_envio_reglamento: z.boolean().refine((val) => val === true, {
+    message: 'Debe confirmar que se da por enterado del reglamento interno',
+  }),
 });
 
 export type FichaMatriculaFormData = z.infer<typeof fichaMatriculaSchema>;

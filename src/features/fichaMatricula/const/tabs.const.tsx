@@ -8,6 +8,7 @@ import { AntecedentesSaludForm } from '../components/forms/AntecedentesSaludForm
 import { AntecedentesSocialesForm } from '../components/forms/AntecedentesSocialesForm';
 import { EstudianteForm } from '../components/forms/EstudianteForm';
 import { FormacionGeneralForm } from '../components/forms/FormacionGeneralForm';
+import { InformacionGeneralForm } from '../components/forms/InformacionGeneralForm';
 
 export const FICHA_MATRICULA_TABS = [
   { key: 'estudiante', title: 'Estudiante', component: <EstudianteForm /> },
@@ -43,5 +44,10 @@ export const FICHA_MATRICULA_TABS = [
     key: 'formacion',
     title: 'Formación General',
     component: <FormacionGeneralForm />,
+  },
+  {
+    key: 'informacion',
+    title: 'Información General',
+    component: <InformacionGeneralForm />,
   },
 ];

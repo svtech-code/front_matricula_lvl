@@ -28,6 +28,7 @@ const FichaMatricula = () => {
     getProgress,
     resetForm,
     formData,
+    informacionGeneralValid,
   } = useFichaMatricula();
   const { createFichaMatricula, isLoading } = useCreateFichaMatricula();
 
@@ -70,7 +71,7 @@ const FichaMatricula = () => {
     const { curso_inscrito, ...estudianteData } = formData.estudiante;
 
     const payload: CreateFichaMatriculaPayload = {
-      periodo_lectivo: formData.periodo_lectivo || 2025,
+      periodo_lectivo: formData.periodo_lectivo || 2,
       grado_a_matricularse: formData.grado_a_matricularse || 1,
       cod_estado_ficha_matricula: 1,
       estudiante: estudianteData,
@@ -83,6 +84,10 @@ const FichaMatricula = () => {
       antecedentes_junaeb: formData.antecedentes_junaeb!,
       familiares: formData.familiares || [],
       formacion_general_opciones: formData.formacion_general_opciones || [],
+      autorizacion_uso_fotos: formData.autorizacion_uso_fotos,
+      confirmacion_datos_entregados:
+        formData.confirmacion_datos_entregados ?? false,
+      enterado_envio_reglamento: formData.enterado_envio_reglamento ?? false,
     };
 
     try {
@@ -136,6 +141,7 @@ const FichaMatricula = () => {
             canGoNext={canGoNext(visibleTabs.length)}
             isLastStep={currentStep === visibleTabs.length - 1}
             isSubmitting={isLoading}
+            canSubmit={informacionGeneralValid}
           />
         </CardBody>
       </Card>

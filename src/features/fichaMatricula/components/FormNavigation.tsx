@@ -9,6 +9,7 @@ interface FormNavigationProps {
   canGoNext: boolean;
   isLastStep: boolean;
   isSubmitting?: boolean;
+  canSubmit?: boolean;
 }
 
 export const FormNavigation = ({
@@ -20,6 +21,7 @@ export const FormNavigation = ({
   canGoNext,
   isLastStep,
   isSubmitting = false,
+  canSubmit = true,
 }: FormNavigationProps) => {
   return (
     <div className="flex justify-between mt-6 pt-6 border-t">
@@ -41,7 +43,7 @@ export const FormNavigation = ({
           color="success"
           onPress={onSubmit}
           isLoading={isSubmitting}
-          isDisabled={isSubmitting}
+          isDisabled={isSubmitting || !canSubmit}
         >
           {isSubmitting ? 'Enviando...' : 'Enviar Formulario'}
         </Button>

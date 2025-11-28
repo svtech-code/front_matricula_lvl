@@ -2,7 +2,9 @@ import { Button, Input, Select, SelectItem, Switch } from '@heroui/react';
 import { useEffect, useMemo, useState } from 'react';
 import type { FamiliarProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { calcularDV } from '@/infra';
+import { Loader } from '@/shared/components/Loader';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
+import { useGetFamiliar } from '../../hooks/useGetFamiliar.hook';
 import { useGetTipoFamiliar } from '../../hooks/useGetTipoFamiliar.hook';
 
 export const AntecedentesFamiliaresForm = () => {
@@ -10,6 +12,7 @@ export const AntecedentesFamiliaresForm = () => {
     useFichaMatricula();
 
   const { tipoFamiliares, isLoading } = useGetTipoFamiliar();
+  const { getFamiliar, isLoading: isSearchingFamiliar } = useGetFamiliar();
 
   const familiares = formData.familiares || [];
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -82,6 +85,34 @@ export const AntecedentesFamiliaresForm = () => {
       run_familiar: rut,
       dv_run_familiar: dv,
     });
+  };
+
+  const handleRutBlur = async () => {
+    handleBlur('run_familiar');
+
+    const rut = currentFamiliar.run_familiar;
+    if (!rut || rut === 0) return;
+
+    const response = await getFamiliar(rut);
+
+    if (response?.success && response.data) {
+      setCurrentFamiliar({
+        ...currentFamiliar,
+        run_familiar: response.data.run_familiar,
+        dv_run_familiar: response.data.dv_run_familiar,
+        nombres: response.data.nombres,
+        apellido_paterno: response.data.apellido_paterno,
+        apellido_materno: response.data.apellido_materno || '',
+        direccion: response.data.direccion,
+        comuna: response.data.comuna,
+        actividad_laboral: response.data.actividad_laboral || '',
+        cod_escolaridad: response.data.cod_escolaridad,
+        lugar_trabajo: response.data.lugar_trabajo,
+        email: response.data.email,
+        numero_telefonico: response.data.numero_telefonico,
+        cod_tipo_familiar: response.data.cod_tipo_familiar,
+      });
+    }
   };
 
   const handlePhoneChange = (value: string) => {
@@ -242,11 +273,24 @@ export const AntecedentesFamiliaresForm = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold">Antecedentes Familiares</h3>
-        <Button color="warning" variant="flat" size="sm" onPress={resetForm}>
-          Limpiar Formulario
-        </Button>
+      {isSearchingFamiliar && (
+        <Loader message="Buscando datos del familiar..." />
+      )}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-xl font-semibold">Antecedentes de apoderados</h3>
+          <Button color="warning" variant="flat" size="sm" onPress={resetForm}>
+            Limpiar Formulario
+          </Button>
+        </div>
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+          <p className="text-sm text-gray-700">
+            <span className="font-semibold">Importante:</span> Todo trámite que
+            involucre a su estudiante, <strong>Solo</strong> lo podrá realizar
+            el Apoderado(a) Titular y/o Suplente, con <strong>excepción</strong>{' '}
+            de la actualización de datos y cambios de apoderado.
+          </p>
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="md:col-span-3">
@@ -259,7 +303,7 @@ export const AntecedentesFamiliaresForm = () => {
                 : ''
             }
             onChange={(e) => handleRutChange(e.target.value)}
-            onBlur={() => handleBlur('run_familiar')}
+            onBlur={handleRutBlur}
             isRequired
             isInvalid={!!getErrorMessage('run_familiar')}
             errorMessage={getErrorMessage('run_familiar')}
@@ -288,7 +332,7 @@ export const AntecedentesFamiliaresForm = () => {
           errorMessage={getErrorMessage('nombres')}
         />
         <Input
-          label="Apellido Paterno"
+          label="Apellido 1"
           value={currentFamiliar.apellido_paterno || ''}
           onChange={(e) =>
             setCurrentFamiliar({
@@ -302,7 +346,7 @@ export const AntecedentesFamiliaresForm = () => {
           errorMessage={getErrorMessage('apellido_paterno')}
         />
         <Input
-          label="Apellido Materno"
+          label="Apellido 2"
           value={currentFamiliar.apellido_materno || ''}
           onChange={(e) =>
             setCurrentFamiliar({
@@ -413,31 +457,40 @@ export const AntecedentesFamiliaresForm = () => {
           </div>
         </div>
       </div>
-      <div className="space-y-2 space-x-4">
-        <Switch
-          isSelected={currentFamiliar.es_titular || false}
-          onValueChange={(value) =>
-            setCurrentFamiliar({
-              ...currentFamiliar,
-              es_titular: value,
-              es_suplente: value ? false : currentFamiliar.es_suplente,
-            })
-          }
-        >
-          Es titular
-        </Switch>
-        <Switch
-          isSelected={currentFamiliar.es_suplente || false}
-          onValueChange={(value) =>
-            setCurrentFamiliar({
-              ...currentFamiliar,
-              es_suplente: value,
-              es_titular: value ? false : currentFamiliar.es_titular,
-            })
-          }
-        >
-          Es suplente
-        </Switch>
+      <div className="space-y-4">
+        <div className="space-y-2 space-x-4">
+          <Switch
+            isSelected={currentFamiliar.es_titular || false}
+            onValueChange={(value) =>
+              setCurrentFamiliar({
+                ...currentFamiliar,
+                es_titular: value,
+                es_suplente: value ? false : currentFamiliar.es_suplente,
+              })
+            }
+          >
+            Es titular
+          </Switch>
+          <Switch
+            isSelected={currentFamiliar.es_suplente || false}
+            onValueChange={(value) =>
+              setCurrentFamiliar({
+                ...currentFamiliar,
+                es_suplente: value,
+                es_titular: value ? false : currentFamiliar.es_titular,
+              })
+            }
+          >
+            Es suplente
+          </Switch>
+        </div>
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-3">
+          <p className="text-sm text-gray-700">
+            <span className="font-semibold">Nota:</span> Opcionalmente se pueden
+            registrar los datos de la madre y el padre, siempre y cuando estos
+            no estén ya registrados como apoderados titular o suplente.
+          </p>
+        </div>
       </div>
       <Button color="primary" onPress={handleAddOrUpdate}>
         {editingIndex !== null ? 'Actualizar Familiar' : 'Agregar Familiar'}

@@ -182,25 +182,18 @@ export const AntecedentesSocialesForm = () => {
           isInvalid={!!getErrorMessage('prevision_salud')}
           errorMessage={getErrorMessage('prevision_salud')}
         />
-        <Input
-          label="Institución de Atención (Seguro)"
-          value={data.institucion_atencion_seguro || ''}
-          onChange={(e) =>
-            handleChange('institucion_atencion_seguro', e.target.value)
-          }
-        />
-        <Input
-          label="Consultorio de Atención Primaria"
-          value={data.consultorio_atencion_primaria || ''}
-          onChange={(e) =>
-            handleChange('consultorio_atencion_primaria', e.target.value)
-          }
-          onBlur={() => handleBlur('consultorio_atencion_primaria')}
-          isRequired
-          isInvalid={!!getErrorMessage('consultorio_atencion_primaria')}
-          errorMessage={getErrorMessage('consultorio_atencion_primaria')}
-        />
       </div>
+      <Input
+        label="Consultorio de Atención Primaria"
+        value={data.consultorio_atencion_primaria || ''}
+        onChange={(e) =>
+          handleChange('consultorio_atencion_primaria', e.target.value)
+        }
+        onBlur={() => handleBlur('consultorio_atencion_primaria')}
+        isRequired
+        isInvalid={!!getErrorMessage('consultorio_atencion_primaria')}
+        errorMessage={getErrorMessage('consultorio_atencion_primaria')}
+      />
       <div className="space-y-2 space-x-8">
         <Switch
           isSelected={data.tiene_agua_potable || false}
@@ -235,6 +228,15 @@ export const AntecedentesSocialesForm = () => {
           Seguro complementario de salud
         </Switch>
       </div>
+      {data.seguro_complementario_salud && (
+        <Input
+          label="Institución de Atención del seguro complementario"
+          value={data.institucion_atencion_seguro || ''}
+          onChange={(e) =>
+            handleChange('institucion_atencion_seguro', e.target.value)
+          }
+        />
+      )}
     </div>
   );
 };
