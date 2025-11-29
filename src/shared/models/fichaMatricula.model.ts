@@ -34,7 +34,7 @@ export interface FichaMatriculaState {
   setGeneros: (generos: GeneroValor[]) => void;
   setTipoFamiliares: (tipoFamiliares: TipoFamiliarValor[]) => void;
   setFormacionGeneral: (formacionGeneral: FormacionGeneralValor[]) => void;
-  setRutEstudiante: (rut: number) => void;
+  setRutEstudiante: (rut: number | null) => void;
   setEstudianteValid: (valid: boolean) => void;
   setAntecedentesPersonalesValid: (valid: boolean) => void;
   setAntecedentesAcademicosValid: (valid: boolean) => void;

@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { CURSO_MATRICULA } from '@/features/fichaMatricula/const/cursos.const'; // Added this import
 import type { FichaMatriculaProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import type { FichaMatriculaState } from '../models/fichaMatricula.model';
 
 const initialFormData: Partial<FichaMatriculaProps> = {
   periodo_lectivo: 2,
-  grado_a_matricularse: 1,
+  grado_a_matricularse: 0,
   estudiante: {
     run_estudiante: 0,
     dv_rut_estudiante: '',
@@ -87,18 +88,33 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
         set((state) => ({
           formData: { ...state.formData, ...data },
         })),
+
       updateSection: (section, data) =>
         set((state) => {
           const currentSection = state.formData[section];
+          const newFormData = {
+            ...state.formData,
+            [section]: Array.isArray(currentSection)
+              ? data
+              : { ...(currentSection as object), ...data },
+          };
+
+          if (section === 'estudiante' && 'curso_inscrito' in data) {
+            const cursoInscritoValue = (data as { curso_inscrito: string })
+              .curso_inscrito;
+            const curso = CURSO_MATRICULA.find(
+              (c) => c.key === cursoInscritoValue,
+            );
+            if (curso) {
+              newFormData.grado_a_matricularse = parseInt(curso.key, 10);
+            }
+          }
+
           return {
-            formData: {
-              ...state.formData,
-              [section]: Array.isArray(currentSection)
-                ? data
-                : { ...(currentSection as object), ...data },
-            },
+            formData: newFormData,
           };
         }),
+
       clearSection: (section) =>
         set((state) => ({
           formData: {
@@ -106,12 +122,14 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
             [section]: initialFormData[section],
           },
         })),
+
       setCurrentStep: (step) => {
         const maxStepReached = get().maxStepReached;
         if (step <= maxStepReached) {
           set({ currentStep: step });
         }
       },
+
       resetForm: () =>
         set({
           formData: initialFormData,
@@ -126,6 +144,7 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
           antecedentesFamiliaresValid: false,
           informacionGeneralValid: false,
         }),
+
       nextStep: () =>
         set((state) => {
           const newStep = state.currentStep + 1;
@@ -134,8 +153,10 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
             maxStepReached: Math.max(state.maxStepReached, newStep),
           };
         }),
+
       previousStep: () =>
         set((state) => ({ currentStep: state.currentStep - 1 })),
+
       canGoNext: (totalSteps) => {
         const currentStep = get().currentStep;
         const estudianteValid = get().estudianteValid;
@@ -176,6 +197,7 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
 
         return currentStep < totalSteps - 1;
       },
+
       canGoPrevious: () => get().currentStep > 0,
       getProgress: (totalSteps) => ((get().currentStep + 1) / totalSteps) * 100,
       setGeneros: (generos) => set({ generos }),
