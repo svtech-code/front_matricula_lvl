@@ -130,12 +130,12 @@ export const useFichaMatriculaStore = create<FichaMatriculaState>()(
         }
       },
 
-      resetForm: () =>
+      resetForm: (rutToPreserve?: number) =>
         set({
           formData: initialFormData,
           currentStep: 0,
           maxStepReached: 0,
-          rutEstudiante: null,
+          rutEstudiante: rutToPreserve ?? null,
           estudianteValid: false,
           antecedentesPersonalesValid: false,
           antecedentesAcademicosValid: false,

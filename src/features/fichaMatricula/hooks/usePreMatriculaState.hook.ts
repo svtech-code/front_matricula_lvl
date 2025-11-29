@@ -18,5 +18,5 @@ export const usePreMatriculaState = () => {
 
   const hasValidAccess = rutEstudiante !== null;
 
-  return { hasValidAccess };
+  return { hasValidAccess, rutRoute: location.state?.rut };
 };

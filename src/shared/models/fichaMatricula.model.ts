@@ -25,7 +25,7 @@ export interface FichaMatriculaState {
   ) => void;
   clearSection: <K extends keyof FichaMatriculaProps>(section: K) => void;
   setCurrentStep: (step: number) => void;
-  resetForm: () => void;
+  resetForm: (rutToPreserve?: number) => void;
   nextStep: () => void;
   previousStep: () => void;
   canGoNext: (totalSteps: number) => boolean;

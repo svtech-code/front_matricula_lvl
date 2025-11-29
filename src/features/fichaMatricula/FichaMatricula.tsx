@@ -17,7 +17,7 @@ import { usePreMatriculaState } from './hooks/usePreMatriculaState.hook';
 
 const FichaMatricula = () => {
   const navigate = useNavigate();
-  const { hasValidAccess } = usePreMatriculaState();
+  const { hasValidAccess, rutRoute } = usePreMatriculaState();
 
   const {
     currentStep,
@@ -40,13 +40,15 @@ const FichaMatricula = () => {
 
   useEffect(() => {
     if (rutEstudiante) {
+      resetForm(rutRoute);
+
       const dv = calcularDV(rutEstudiante);
       updateSection('estudiante', {
         run_estudiante: rutEstudiante,
         dv_rut_estudiante: dv,
       });
     }
-  }, [updateSection, rutEstudiante]);
+  }, [updateSection, rutEstudiante, resetForm, rutRoute]);
 
   // Función para ocultar sección de formación general para estudiantes de 3 y 4 grado
   const visibleTabs = useMemo(() => {
