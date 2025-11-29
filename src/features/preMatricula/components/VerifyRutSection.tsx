@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVerifyPreMatricula } from '../hooks/useVerifyPreMatricula.hook';
-import AlertExistsPreMatricula from './AlertExistsPreMatricula';
 import { VerifyRutForm } from './forms/VerifyRutForm';
+import AlertExistsPreMatricula from './ui/AlertExistsPreMatricula';
 
 export const VerifyRutSection = () => {
   const navigate = useNavigate();
