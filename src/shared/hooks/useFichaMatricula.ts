@@ -2,6 +2,7 @@ import { useFichaMatriculaStore } from '../stores/fichaMatricula.store';
 
 export const useFichaMatricula = () => {
   const formData = useFichaMatriculaStore((state) => state.formData);
+  const rutEstudiante = useFichaMatriculaStore((state) => state.rutEstudiante);
   const currentStep = useFichaMatriculaStore((state) => state.currentStep);
   const maxStepReached = useFichaMatriculaStore(
     (state) => state.maxStepReached,
@@ -54,6 +55,9 @@ export const useFichaMatricula = () => {
   const setFormacionGeneral = useFichaMatriculaStore(
     (state) => state.setFormacionGeneral,
   );
+  const setRutEstudiante = useFichaMatriculaStore(
+    (state) => state.setRutEstudiante,
+  );
   const setEstudianteValid = useFichaMatriculaStore(
     (state) => state.setEstudianteValid,
   );
@@ -78,6 +82,7 @@ export const useFichaMatricula = () => {
 
   return {
     formData,
+    rutEstudiante,
     currentStep,
     maxStepReached,
     generos,
@@ -104,6 +109,7 @@ export const useFichaMatricula = () => {
     setGeneros,
     setTipoFamiliares,
     setFormacionGeneral,
+    setRutEstudiante,
     setEstudianteValid,
     setAntecedentesPersonalesValid,
     setAntecedentesAcademicosValid,

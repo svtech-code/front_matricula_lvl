@@ -25,7 +25,7 @@ export const AntecedentesFamiliaresForm = () => {
     apellido_paterno: '',
     direccion: '',
     comuna: '',
-    cod_escolaridad: 1,
+    cod_escolaridad: 0,
     lugar_trabajo: '',
     email: '',
     numero_telefonico: '',
