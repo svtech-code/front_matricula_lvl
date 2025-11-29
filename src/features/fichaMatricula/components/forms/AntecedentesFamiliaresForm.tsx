@@ -2,10 +2,10 @@ import { Button, Input, Select, SelectItem, Switch } from '@heroui/react';
 import { useEffect, useMemo, useState } from 'react';
 import type { FamiliarProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { calcularDV } from '@/infra';
-import { Loader } from '@/shared/components/Loader';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 import { useGetFamiliar } from '../../hooks/useGetFamiliar.hook';
 import { useGetTipoFamiliar } from '../../hooks/useGetTipoFamiliar.hook';
+import { Loader } from '@/shared/components/loaders/Loader';
 
 export const AntecedentesFamiliaresForm = () => {
   const { formData, updateSection, setAntecedentesFamiliaresValid } =
