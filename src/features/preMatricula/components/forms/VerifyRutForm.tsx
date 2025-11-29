@@ -37,8 +37,7 @@ export const VerifyRutForm = ({
 
   const handleFormSubmit = (data: VerifyRutFormData) => {
     const rutNumber = Number.parseInt(data.rut, 10);
-    const calculatedDv = calcularDV(rutNumber);
-    onSubmit(rutNumber, calculatedDv);
+    onSubmit(rutNumber);
   };
 
   return (
@@ -81,7 +80,7 @@ export const VerifyRutForm = ({
         </div>
       </div>
 
-      {rutValue && rutValue.length >= 7 && (
+      {rutValue && rutValue.length >= 8 && rutValue.length <= 9 && (
         <RutVisualization
           formattedRut={formattedRut}
           isExtranjero={isExtranjero}
