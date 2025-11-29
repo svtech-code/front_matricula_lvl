@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
-import { useFichaMatriculaStore } from '@/shared/stores/fichaMatricula.store';
+import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 
 export const usePreMatriculaState = () => {
   const location = useLocation();
-  const { setRutEstudiante, rutEstudiante } = useFichaMatriculaStore();
+  const { rutEstudiante, setRutEstudiante } = useFichaMatricula();
 
   useEffect(() => {
     const state = location.state as { rut?: number } | null;
+
     if (state?.rut) {
       setRutEstudiante(state.rut);
+    } else {
+      setRutEstudiante(null);
     }
   }, [location.state, setRutEstudiante]);
 
-  const hasValidAccess = () => {
-    return rutEstudiante !== null;
-  };
+  const hasValidAccess = rutEstudiante !== null;
 
   return { hasValidAccess };
 };

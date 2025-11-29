@@ -1,9 +1,10 @@
 import { Card, CardBody } from '@heroui/react';
 import { addToast } from '@heroui/toast';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { CreateFichaMatriculaPayload } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { PathRoute } from '@/domains/routes/route.entity';
+import { calcularDV } from '@/infra';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 import { FormNavigation } from './components/FormNavigation';
 import { FormProgress } from './components/FormProgress';
@@ -17,6 +18,7 @@ import { usePreMatriculaState } from './hooks/usePreMatriculaState.hook';
 const FichaMatricula = () => {
   const navigate = useNavigate();
   const { hasValidAccess } = usePreMatriculaState();
+
   const {
     currentStep,
     maxStepReached,
@@ -28,10 +30,25 @@ const FichaMatricula = () => {
     getProgress,
     resetForm,
     formData,
+    rutEstudiante,
     informacionGeneralValid,
+    updateSection,
   } = useFichaMatricula();
+
+  // hook para manejar la petición de creación de la ficha de matrícula
   const { createFichaMatricula, isLoading } = useCreateFichaMatricula();
 
+  useEffect(() => {
+    if (rutEstudiante) {
+      const dv = calcularDV(rutEstudiante);
+      updateSection('estudiante', {
+        run_estudiante: rutEstudiante,
+        dv_rut_estudiante: dv,
+      });
+    }
+  }, [updateSection, rutEstudiante]);
+
+  // Función para ocultar sección de formación general para estudiantes de 3 y 4 grado
   const visibleTabs = useMemo(() => {
     const cursoInscrito = formData.estudiante?.curso_inscrito;
     if (cursoInscrito === '3' || cursoInscrito === '4') {
@@ -40,7 +57,8 @@ const FichaMatricula = () => {
     return FICHA_MATRICULA_TABS;
   }, [formData.estudiante?.curso_inscrito]);
 
-  if (!hasValidAccess()) {
+  // Si no hay rut (indica que viene desde pre-matricula), redirecciona a prematricula
+  if (!hasValidAccess) {
     return <RedirectOverlay />;
   }
 
@@ -72,7 +90,7 @@ const FichaMatricula = () => {
 
     const payload: CreateFichaMatriculaPayload = {
       periodo_lectivo: formData.periodo_lectivo || 2,
-      grado_a_matricularse: formData.grado_a_matricularse || 1,
+      grado_a_matricularse: formData.grado_a_matricularse || 0,
       cod_estado_ficha_matricula: 1,
       estudiante: estudianteData,
       antecedentes_personales: formData.antecedentes_personales!,
@@ -91,8 +109,7 @@ const FichaMatricula = () => {
     };
 
     try {
-      const response = await createFichaMatricula(payload);
-      console.log('✅ Ficha creada exitosamente:', response);
+      await createFichaMatricula(payload);
       navigate(PathRoute.REGISTRO_EXITOSO);
     } catch (error) {
       addToast({
@@ -103,7 +120,6 @@ const FichaMatricula = () => {
             : 'Ocurrió un error inesperado',
         color: 'danger',
       });
-      console.error('❌ Error al crear ficha:', error);
     }
   };
 

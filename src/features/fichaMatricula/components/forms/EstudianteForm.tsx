@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import type { EstudianteProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { calcularDV } from '@/infra';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
-import { useFichaMatriculaStore } from '@/shared/stores/fichaMatricula.store';
 import { CURSO_MATRICULA } from '../../const/cursos.const';
 import { useGetGeneros } from '../../hooks/useGetGeneros.hook';
 
@@ -11,7 +10,6 @@ export const EstudianteForm = () => {
   const { formData, updateSection, clearSection, setEstudianteValid } =
     useFichaMatricula();
   const { generos, isLoading } = useGetGeneros();
-  const { rutEstudiante } = useFichaMatriculaStore();
 
   const estudiante: Partial<EstudianteProps> = formData.estudiante || {};
 
@@ -40,19 +38,6 @@ export const EstudianteForm = () => {
   const handleFieldTouch = (field: keyof typeof touchedFields) => {
     setTouchedFields((prev) => ({ ...prev, [field]: true }));
   };
-
-  useEffect(() => {
-    if (
-      rutEstudiante &&
-      (!estudiante.run_estudiante || estudiante.run_estudiante === 0)
-    ) {
-      const dv = calcularDV(rutEstudiante);
-      updateSection('estudiante', {
-        run_estudiante: rutEstudiante,
-        dv_rut_estudiante: dv,
-      });
-    }
-  }, [rutEstudiante, estudiante.run_estudiante, updateSection]);
 
   const handleChange = (field: string, value: string | number) => {
     updateSection('estudiante', { [field]: value });
