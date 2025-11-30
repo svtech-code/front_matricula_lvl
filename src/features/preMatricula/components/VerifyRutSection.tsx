@@ -5,6 +5,7 @@ import { VerifyRutForm } from './forms/VerifyRutForm';
 import AlertExistsPreMatricula from './ui/AlertExistsPreMatricula';
 import { ConfirmRutModal } from './ui/ConfirmRutModal';
 import { calcularDV } from '@/infra';
+import type { PreMatriculaResponse } from '@/domains/preMatricula/preMatricula.entity';
 
 export const VerifyRutSection = () => {
   const navigate = useNavigate();
@@ -12,6 +13,9 @@ export const VerifyRutSection = () => {
   const { verifyPreMatricula, isLoading, error } = useVerifyPreMatricula();
   const [showPreMatriculaExists, setShowPreMatriculaExists] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [dataStudent, setDataStudent] = useState<PreMatriculaResponse | null>(
+    null,
+  );
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
   const [rutToConfirm, setRutToConfirm] = useState<{ rut: number } | null>(
     null,
@@ -28,6 +32,7 @@ export const VerifyRutSection = () => {
 
     if (response) {
       if (response.success) {
+        setDataStudent(response.data);
         setShowPreMatriculaExists(true);
         setIsVisible(true);
       } else {
@@ -76,6 +81,8 @@ export const VerifyRutSection = () => {
         <AlertExistsPreMatricula
           isVisible={isVisible}
           setIsVisible={setIsVisible}
+          dataStudent={dataStudent}
+          setDataStudent={setDataStudent}
         />
       )}
 

@@ -104,6 +104,7 @@ export const AntecedentesAcademicosForm = () => {
         <Select
           label="Seleccionar cursos que ha reprobado"
           selectionMode="multiple"
+          description="Indique si el estudiante ha reprobado algún curso. Seleccione uno o varios."
           selectedKeys={data.cursos_reprobados || []}
           onSelectionChange={(keys) => {
             const values = Array.from(keys) as string[];
@@ -113,6 +114,9 @@ export const AntecedentesAcademicosForm = () => {
           isRequired
           isInvalid={!!getErrorMessage('cursos_reprobados')}
           errorMessage={getErrorMessage('cursos_reprobados')}
+          classNames={{
+            description: 'text-blue-800/80 font-semibold text-md',
+          }}
         >
           {CURSOS_REPROBADOS.map((curso) => (
             <SelectItem key={curso.key}>{curso.label}</SelectItem>
@@ -120,6 +124,7 @@ export const AntecedentesAcademicosForm = () => {
         </Select>
         <Select
           label="Curso año 2025"
+          description="Indique el curso que el estudiante está cursando durante este año."
           selectedKeys={
             data.curso_periodo_anterior ? [data.curso_periodo_anterior] : []
           }
@@ -131,6 +136,9 @@ export const AntecedentesAcademicosForm = () => {
           isRequired
           isInvalid={!!getErrorMessage('curso_periodo_anterior')}
           errorMessage={getErrorMessage('curso_periodo_anterior')}
+          classNames={{
+            description: 'text-blue-800/80 font-semibold text-md',
+          }}
         >
           {CURSO_PERIODO_ANTERIOR.map((curso) => (
             <SelectItem key={curso.key}>{curso.label}</SelectItem>

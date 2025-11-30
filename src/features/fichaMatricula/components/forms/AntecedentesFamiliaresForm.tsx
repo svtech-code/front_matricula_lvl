@@ -1,11 +1,31 @@
-import { Button, Input, Select, SelectItem, Switch } from '@heroui/react';
+import {
+  Alert,
+  Button,
+  Input,
+  Select,
+  SelectItem,
+  Switch,
+} from '@heroui/react';
 import { useEffect, useMemo, useState } from 'react';
 import type { FamiliarProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
 import { calcularDV } from '@/infra';
+import { Loader } from '@/shared/components/loaders/Loader';
 import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 import { useGetFamiliar } from '../../hooks/useGetFamiliar.hook';
 import { useGetTipoFamiliar } from '../../hooks/useGetTipoFamiliar.hook';
-import { Loader } from '@/shared/components/loaders/Loader';
+
+// const ESCOLARIDAD_OPTIONS = [                                                                                                                                     │
+//   { id: 1, label: 'Sin escolaridad' },                                                                                                                            │
+//   { id: 2, label: 'Básica incompleta' },                                                                                                                          │
+//   { id: 3, label: 'Básica completa' },                                                                                                                            │
+//   { id: 4, label: 'Media incompleta' },                                                                                                                           │
+//   { id: 5, label: 'Media completa' },                                                                                                                             │
+//   { id: 6, label: 'Técnico nivel superior incompleto' },                                                                                                          │
+//   { id: 7, label: 'Técnico nivel superior completo' },                                                                                                            │
+//   { id: 8, label: 'Universitaria incompleta' },                                                                                                                   │
+//   { id: 9, label: 'Universitaria completa' },                                                                                                                     │
+//   { id: 10, label: 'Postgrado' },                                                                                                                                 │
+// ];
 
 export const AntecedentesFamiliaresForm = () => {
   const { formData, updateSection, setAntecedentesFamiliaresValid } =
@@ -293,7 +313,7 @@ export const AntecedentesFamiliaresForm = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div className="md:col-span-3">
+        <div className="md:col-span-3 ">
           <Input
             label="RUN Familiar"
             type="text"
@@ -316,6 +336,13 @@ export const AntecedentesFamiliaresForm = () => {
             value={currentFamiliar.dv_run_familiar || ''}
             isDisabled
           />
+        </div>
+
+        <div className="md:col-span-6">
+          <Alert variant="flat" color="warning">
+            Solo ingrese el rut, sin el digito verificador, ya que este se
+            autocalcula ...
+          </Alert>
         </div>
       </div>
 
@@ -489,6 +516,15 @@ export const AntecedentesFamiliaresForm = () => {
             <span className="font-semibold">Nota:</span> Opcionalmente se pueden
             registrar los datos de la madre y el padre, siempre y cuando estos
             no estén ya registrados como apoderados titular o suplente.
+          </p>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-3">
+          <p className="text-sm text-gray-700">
+            <span className="font-semibold">Información:</span> Para agregar los
+            datos de otro apoderado(a), padre o madre, solo debe volver a
+            registrar datos en el formulario y presionar el boton "Agregar
+            Familiar".
           </p>
         </div>
       </div>

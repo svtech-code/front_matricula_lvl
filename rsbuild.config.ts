@@ -17,4 +17,22 @@ export default defineConfig({
   },
 
   html: { template: './static/index.html' },
+
+  output: {
+    filenameHash: true,
+    minify: {
+      js: true,
+      css: true,
+    },
+    sourceMap: {
+      js: 'source-map',
+      css: true,
+    },
+  },
+
+  performance: {
+    chunkSplit: {
+      strategy: 'split-by-module',
+    },
+  },
 });
