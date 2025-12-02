@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CURSO_MATRICULA } from '@/features/fichaMatricula/const/cursos.const'; // Added this import
 import type { FichaMatriculaProps } from '@/domains/fichaMatricula/fichaMatricula.entity';
+import { CURSO_MATRICULA } from '@/features/fichaMatricula/const/cursos.const'; // Added this import
 import type { FichaMatriculaState } from '../models/fichaMatricula.model';
 
 const initialFormData: Partial<FichaMatriculaProps> = {

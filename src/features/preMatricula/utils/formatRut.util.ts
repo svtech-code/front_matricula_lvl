@@ -8,4 +8,3 @@ export const formatRutWithDash = (rut: string, dv: string): string => {
 //   const rutString = rut.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 //   return `${rutString}-${dv}`;
 // };
-

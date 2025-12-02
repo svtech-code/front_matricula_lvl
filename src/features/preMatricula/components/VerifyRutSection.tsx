@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { PreMatriculaResponse } from '@/domains/preMatricula/preMatricula.entity';
+import { calcularDV } from '@/infra';
 import { useVerifyPreMatricula } from '../hooks/useVerifyPreMatricula.hook';
 import { VerifyRutForm } from './forms/VerifyRutForm';
 import AlertExistsPreMatricula from './ui/AlertExistsPreMatricula';
 import { ConfirmRutModal } from './ui/ConfirmRutModal';
-import { calcularDV } from '@/infra';
-import type { PreMatriculaResponse } from '@/domains/preMatricula/preMatricula.entity';
 
 export const VerifyRutSection = () => {
   const navigate = useNavigate();
