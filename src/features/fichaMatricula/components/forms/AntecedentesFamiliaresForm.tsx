@@ -14,18 +14,18 @@ import { useFichaMatricula } from '@/shared/hooks/useFichaMatricula';
 import { useGetFamiliar } from '../../hooks/useGetFamiliar.hook';
 import { useGetTipoFamiliar } from '../../hooks/useGetTipoFamiliar.hook';
 
-// const ESCOLARIDAD_OPTIONS = [                                                                                                                                     │
-//   { id: 1, label: 'Sin escolaridad' },                                                                                                                            │
-//   { id: 2, label: 'Básica incompleta' },                                                                                                                          │
-//   { id: 3, label: 'Básica completa' },                                                                                                                            │
-//   { id: 4, label: 'Media incompleta' },                                                                                                                           │
-//   { id: 5, label: 'Media completa' },                                                                                                                             │
-//   { id: 6, label: 'Técnico nivel superior incompleto' },                                                                                                          │
-//   { id: 7, label: 'Técnico nivel superior completo' },                                                                                                            │
-//   { id: 8, label: 'Universitaria incompleta' },                                                                                                                   │
-//   { id: 9, label: 'Universitaria completa' },                                                                                                                     │
-//   { id: 10, label: 'Postgrado' },                                                                                                                                 │
-// ];
+const ESCOLARIDAD_OPTIONS = [
+  { id: 1, label: 'Sin información' },
+  { id: 2, label: 'Básica incompleta' },
+  { id: 3, label: 'Básica completa' },
+  { id: 4, label: 'Media incompleta' },
+  { id: 5, label: 'Media completa' },
+  { id: 6, label: 'Técnico nivel superior incompleto' },
+  { id: 7, label: 'Técnico nivel superior completo' },
+  { id: 8, label: 'Universitaria incompleta' },
+  { id: 9, label: 'Universitaria completa' },
+  { id: 10, label: 'Postgrado' },
+];
 
 export const AntecedentesFamiliaresForm = () => {
   const { formData, updateSection, setAntecedentesFamiliaresValid } =
@@ -422,17 +422,50 @@ export const AntecedentesFamiliaresForm = () => {
           isInvalid={!!getErrorMessage('direccion')}
           errorMessage={getErrorMessage('direccion')}
         />
-        <Input
-          label="Comuna"
-          value={currentFamiliar.comuna || ''}
-          onChange={(e) =>
-            setCurrentFamiliar({ ...currentFamiliar, comuna: e.target.value })
-          }
-          onBlur={() => handleBlur('comuna')}
-          isRequired
-          isInvalid={!!getErrorMessage('comuna')}
-          errorMessage={getErrorMessage('comuna')}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="md:col-span-2">
+            <Input
+              label="Comuna"
+              value={currentFamiliar.comuna || ''}
+              onChange={(e) =>
+                setCurrentFamiliar({
+                  ...currentFamiliar,
+                  comuna: e.target.value,
+                })
+              }
+              onBlur={() => handleBlur('comuna')}
+              isRequired
+              isInvalid={!!getErrorMessage('comuna')}
+              errorMessage={getErrorMessage('comuna')}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <Select
+              label="Escolaridad"
+              selectedKeys={
+                currentFamiliar.cod_escolaridad
+                  ? [currentFamiliar.cod_escolaridad.toString()]
+                  : []
+              }
+              onSelectionChange={(keys) => {
+                const value = Number.parseInt(
+                  Array.from(keys)[0] as string,
+                  10,
+                );
+                setCurrentFamiliar({
+                  ...currentFamiliar,
+                  cod_escolaridad: value,
+                });
+              }}
+            >
+              {ESCOLARIDAD_OPTIONS.map((escolaridad) => (
+                <SelectItem key={escolaridad.id.toString()}>
+                  {escolaridad.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+        </div>
         <Input
           label="Actividad Laboral"
           value={currentFamiliar.actividad_laboral || ''}
