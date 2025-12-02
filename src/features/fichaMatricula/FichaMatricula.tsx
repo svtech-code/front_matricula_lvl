@@ -114,7 +114,7 @@ const FichaMatricula = () => {
 
     try {
       await createFichaMatricula(payload);
-      navigate(PathRoute.REGISTRO_EXITOSO);
+      navigate(PathRoute.REGISTRO_EXITOSO, { replace: true });
     } catch (error) {
       addToast({
         title: 'Error al crear ficha',
@@ -129,7 +129,7 @@ const FichaMatricula = () => {
 
   const handleCancel = () => {
     resetForm();
-    navigate(PathRoute.PRE_MATRICULA);
+    navigate(PathRoute.PRE_MATRICULA, { replace: true });
   };
 
   const handleTabChange = (key: string) => {

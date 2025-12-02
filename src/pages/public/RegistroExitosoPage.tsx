@@ -17,7 +17,7 @@ const RegistroExitosoPage = () => {
 
   const handleVolverInicio = () => {
     resetForm();
-    navigate(PathRoute.PRE_MATRICULA);
+    navigate(PathRoute.PRE_MATRICULA, { replace: true });
   };
 
   const getCursoLabel = (codCurso?: string) => {
