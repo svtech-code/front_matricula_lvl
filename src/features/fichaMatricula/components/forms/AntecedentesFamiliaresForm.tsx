@@ -130,7 +130,8 @@ export const AntecedentesFamiliaresForm = () => {
         lugar_trabajo: response.data.lugar_trabajo,
         email: response.data.email,
         numero_telefonico: response.data.numero_telefonico,
-        cod_tipo_familiar: response.data.cod_tipo_familiar,
+        // Intencionalmente omitimos cod_tipo_familiar para que el usuario lo seleccione manualmente
+        // cod_tipo_familiar: response.data.cod_tipo_familiar,
       });
     }
   };
